@@ -13,12 +13,20 @@
 # Atualizar o pip
 -> pip install --upgrade pip
 # Startando o project
+# Cria uma pasta na raiz - djangoapp
+# acesse a pasta djangoapp: C:\Django_Blog> cd djangoapp
 -> django-admin startproject project .
-Teste para ver se o django está ok. Se n tiver feche e abra o VSCode
--> python manage.py runserver
+# saia da pasta C:\Django_Blog\djangoapp> cd ..
+
+# -->> Raiz alterada para usar o docker <<-- #
+
+# Comando runserver com nova raiz do porjeto:
+-> python djangoapp/manage.py runserver
 """
 
 #--------------------------------------------------------
+
+
 # Configurando o git ignore --> arquivos que não vão para o repositório
 """
 crei o .gitignore na raiz do projeto 
@@ -38,9 +46,7 @@ OBS: usar o mesmo nome e email do GITHUB
 # Olhando as configurações do GIT:
 -> git config --global
 
-# Eu não alterei o defaultBranch para main - deixei como master
-# estava dando erro na hora de dar o push
-
+# DefaultBranch - master
 # Adicioanando: para o git monitorar os arquivos 
 -> git add .  - para adicionar tudo
 
@@ -59,6 +65,8 @@ copie a chave https e dê o seguinte comando:
 # Enviando os commites: 
 -> git push origin master -u
 
+# Apague o db.sqlite3 pois será usado o db postgresql
+
 
 #------------------------------------------------------
 -> git add . (ou) git add nome_do_arquivo
@@ -67,4 +75,16 @@ copie a chave https e dê o seguinte comando:
 # ------------------------------------------------------------
 """
 
+# dotenv_files:
+# .env --> não vai p o github. Aqui coloca as informações reais
+# .env-example --> vai p o github
+
+# 517 - configurações:
+# dotenv_files(.env, .env-example), dockerignore, settings.py, url.py
+
+# -----------------------------------------------------------------------------
+
+# 518 - Dockerfile 
+
+# continuação das configurações...
 
