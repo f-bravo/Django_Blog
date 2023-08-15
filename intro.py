@@ -88,3 +88,95 @@ copie a chave https e dê o seguinte comando:
 
 # continuação das configurações...
 
+""" Avisos:
+warning: in the working copy of 'scripts/commands.sh', LF will be replaced by 
+CRLF the next time Git touches it
+"""
+
+#------------------------------------------------------------------------------
+
+# Dockerfile: 
+# Gera a imagem(Django), constrói uma imagem com as configurações
+
+# Para trabalhar com Django precisa de uma base de dados do postgre no Django
+
+""" 
+### Tutorial oficial Microsoft p/ instalar o Docker: 
+https://docs.microsoft.com/en-us/windows/wsl/install-win10
+
+### Passo 1 (PowerShell Admin): ctrl+v
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+### Passo 2 (PowerShell Admin): ctrl+v
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+### Passo 3
+REINICIE O COMPUTADOR
+
+### Passo 4 (Download the Linux kernel update package):
+https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
+
+### Passo 5 (PowerShell Admin):
+wsl --set-default-version 2
+
+### Passo 7 (Instale o docker):
+Tutorial: https://docs.docker.com/docker-for-windows/install/
+"""
+
+# Reinicie a máquina, abra terminal e teste o comando docker ps ou 
+# docker-compose --help. 
+
+
+# Toda vez que alterar alguma coisa no:
+#  Docker-compose, dockerfiile e .env - rebuild a imagem.
+# -> docker compose up --build
+
+# Volte para a pasta raiz e entre na pasta do arquivo.
+# PS C:\Users\bravo> cd..
+# PS C:\Users> cd..
+# PS C:\> cd C:\Django_Blog
+# PS C:\Django_Blog>
+
+# Finalizada a instalação
+
+# Se n precisar fazer a build, p subir a aplicação django ou apenas subir a app
+# -> docker compose up
+
+# Para deixar o docker rodando sem travar o terminal:
+# -> docker compose up -d
+
+# para desligar o container:
+# docker compose down
+
+# Mas é bom trabalhar podendo ver o que acontece como os prints do Django.
+# Basta não usar o comando -d no final e abrir outra aba no terminal.
+
+
+# -----------------------------------------------------------------------------
+
+# O docker adiciona uma camada de complexidade a mais 
+# A vantagem é subir o ambiente de desenvolvimento exatamente igual em todas as 
+# máquinas que for usar. Isso é bom para simular o ambiente de produção
+
+# Tudo está configurado para rodar dentro do container.
+# Como executar comandos dentro do container?
+# Sem nenhum container rodando:
+
+# Exemplo:
+# Sempre que subir un container e quiser descer ele use (--rm)
+# Para ver a versão do Python:
+# -> docker-compose run --rm djangoapp python -V
+# Python 3.11.3
+
+# PS C:\Django_Blog> docker-compose run --rm djangoapp pwd
+# /djangoapp
+
+# Para executar qualquer comando diretamente:
+# -> docker-compose run --rm djangoapp COMANDO
+
+# Criado os scripts collectstatic.sh, makemigrations.sh. migrate.sh, 
+# runserver.sh e wait_psql.sh
+
+# Ao alterar os scripts precisa buildar novamente pois as alterações não serão 
+# aplicadas. Somente após a nova build.
+# -> docker-compose up --build
