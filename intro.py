@@ -203,3 +203,54 @@ Tutorial: https://docs.docker.com/docker-for-windows/install/
 # templates/base.html na raiz
 
 
+# 523 
+
+# Separando os parciais header, pagination e  footer
+
+# Crie os arquivos na pasta partials
+# _header.html, _pagination.html e _footer.html
+# Coloque um h1 em cada para testar
+# no base.html que está na raiz:
+""" 
+<body>
+    {% include 'blog/partials/_header.html' %}
+    {% block content %}{% endblock content %}
+    {% include 'blog/partials/_pagination.html' %}
+    {% include 'blog/partials/_footer.html' %}
+</body>
+"""
+
+# 524
+# Criando o app para as configurações do site: site_setup
+
+# Quando tem um app que não tem relação com outro app geralmente cria separado
+# ->  docker-compose run --rm djangoapp python manage.py startapp site_setup
+
+# Criado no djangoapp a pasta site_setup
+# A intenção com isso:
+# Criar na área administrativa do Django uma parte onde o usuário possa 
+# configurar o site. Título, descrição, se vai mostrar header ou não, etc.
+
+# Qualquer cosia que vá usar automaticamente do Django após criar o app precisa
+# registrar o nome do app dentro do projetct/settings.py.
+# Agora aplique o comando para fazer as migrações.
+# Migração:
+# -> docker-compose run --rm djangoapp migrate.sh
+
+# Para mostrar o app na área administrativa:
+""" site_setup/admin.py 
+from django.contrib import admin
+from site_setup.models import MenuLink
+# Register your models here.
+
+@admin.register(MenuLink)
+class MenuLinkAdmin(admin.ModelAdmin):
+    list_display = 'id', 'text', 'url_or_path',
+    list_display_links = 'id', 'text', 'url_or_path',
+    search_fields = 'id', 'text', 'url_or_path',
+"""
+
+
+
+
+
