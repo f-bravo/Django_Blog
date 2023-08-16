@@ -250,7 +250,19 @@ class MenuLinkAdmin(admin.ModelAdmin):
     search_fields = 'id', 'text', 'url_or_path',
 """
 
+# ---> 525 
 
+# Criando o model SiteSetup e registrando na admin do Django
 
+# from site_setup.models import MenuLink, SiteSetup
+# @admin.register(SiteSetup)
+# class SiteSetupAdmin(admin.ModelAdmin):
+#    list_display = 'title', 'description',
+
+# Será feita uma coisa para quando o user adicionar um setup ele não possa fazer
+# novamente.
+# Será usado o método de permissões do django
+# Se o método has_add_permission retornar True a pssoa tem permissão de add 
+# novos valores. Se retornar False a pessoa não vai ter a permissão.
 
 
