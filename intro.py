@@ -180,3 +180,26 @@ Tutorial: https://docs.docker.com/docker-for-windows/install/
 # Ao alterar os scripts precisa buildar novamente pois as alterações não serão 
 # aplicadas. Somente após a nova build.
 # -> docker-compose up --build
+
+
+# ---> 521:
+
+
+# Criando usper user
+# -> docker-compose run --rm djangoapp python manage.py createsuperuser
+# nome:
+# email:
+# senha:
+
+# Criando o app blog:
+# terá apenas um app para essa aplicação 
+# -> docker-compose run --rm djangoapp python manage.py startapp blog
+
+
+# crie duas pastas no app:
+# static -> crie blog/css/style.css
+# templates -> blog/pages/index.html 
+# templates/blog -> partials 
+# templates/base.html na raiz
+
+
