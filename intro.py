@@ -253,16 +253,64 @@ class MenuLinkAdmin(admin.ModelAdmin):
 # ---> 525 
 
 # Criando o model SiteSetup e registrando na admin do Django
+"""
+@admin.register(SiteSetup)
+class SiteSetupAdmin(admin.ModelAdmin):
+    list_display = 'title', 'description',
 
-# from site_setup.models import MenuLink, SiteSetup
-# @admin.register(SiteSetup)
-# class SiteSetupAdmin(admin.ModelAdmin):
-#    list_display = 'title', 'description',
-
+    def has_add_permission(self, request):
+        return not SiteSetup.objects.exists(), 
+"""
 # Será feita uma coisa para quando o user adicionar um setup ele não possa fazer
 # novamente.
 # Será usado o método de permissões do django
 # Se o método has_add_permission retornar True a pssoa tem permissão de add 
 # novos valores. Se retornar False a pessoa não vai ter a permissão.
+# Isso é para bloquear na área adminstrativa
 
+
+# --> 526
+
+# Montando o relacionamento entre MenuLink e SiteSetup
+
+# SiteSetup(1) tem MenuLink(1*) muitos
+
+# Em models.py na class MenuLink add esse trecho:
+""" site_setup = models.ForeignKey(
+        'SiteSetup', on_delete=models.CASCADE, blank=True, null=True, 
+        default=None
+    )"""
+# class MenuLinkInLine(admin.TabularInline):
+#     model = MenuLink
+#     extra = 1
+
+
+# 527 - usando Context Processors para injetar valores em todos os templates
+
+# Ter acesso a um contexto em tods as páginas de tds os apps:
+# Context Processors:
+# Sem precisar de fazer uma views para injetar esse valor o Django:
+# é uma função que recebe a request e retorna um dicionário
+# a chave do dicionário vai para o template
+# Criando um arquivo em site_setup / constext_processor.py  
+
+""" Criação para teste no constext_processor.py:
+
+from site_setup.models import SiteSetup
+
+def context_processor_example(request):
+    return {
+        'example': 'Veio do context processor (example)'
+    }
+
+def site_setup(request):
+    setup = SiteSetup.objects.order_by('-id').first()
+
+    return {
+        'site_setup': setup,
+    }"""
+
+# Em project/settings.py adicione nos Templates em options add os caminhos:
+# 'site_setup.context_processors.context_processor_example',
+# 'site_setup.context_processors.site_setup',
 
