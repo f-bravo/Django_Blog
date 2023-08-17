@@ -314,3 +314,77 @@ def site_setup(request):
 # 'site_setup.context_processors.context_processor_example',
 # 'site_setup.context_processors.site_setup',
 
+# 528
+
+# criando campo ImageFiel para Favicon no Django
+
+# Precisa do Pillow instalado.
+# Usando Docker não é simplismente pip install pillow 
+# Precisa ir no arquivo requirimets.txt e colocar:
+# Pillow>=9.5.0,<9.6
+# Agora faça a build novamente
+# -> Django_Blog> docker-compose up --build
+# com isso ele instala o Pillow e faz as migrações
+
+# Imagem para favicon precisa ser PNG e ter um tamanho pequeno.
+# O padrão é 16x16
+# em blog/partials/_head.html:
+"""coloque com IF - se não envier nenhum favicon não dará erro
+{% if site_setup.favicon %}
+ <link rel="shortcut icon" href="{{ site_setup.favicon.url}}" type="image/png">
+{% endif %}
+"""
+
+# Redimencionando a imagem no momento que for enviada:
+
+# 529
+
+# Vamos criar um validador para o campo do favicon para que seja enviado 
+# apenas o formato png
+# Em djangoapp/site_setup/models.py :
+""" import o novo módulo e acrescente o validador: 
+from utils.model_validators import validate_png
+from utils.images import resize_image
+
+favicon = models.ImageField(
+        upload_to='assets/favicon/%Y/%m/',
+        blank=True, default='',
+        validators=[validate_png],
+    )
+    # current_favicon_name - antes de salvar
+    # self.favicon.name - depois de salvar
+
+    def save(self, *args, **kwargs):
+        current_favicon_name = str(self.favicon.name)
+        super().save(*args, **kwargs)
+        favicon_changed = False
+
+        if self.favicon:
+            favicon_changed = current_favicon_name != self.favicon.name
+
+        if favicon_changed:
+            resize_image(self.favicon, 32)  # redimenciona para 32px
+"""
+
+# Em djangoapp crie uma pasta utils/model_validators.py e faça uma função:
+
+"""
+from django.core.exceptions import ValidationError
+
+def validate_png(image):
+    if not image.name.lower().endswith('.png'):
+        raise ValidationError('Imagem precisa ser PNG')
+"""
+# para não deixar o favicon que não seja png ser enviado:
+# tem que criar uma exceção importando o ValidationError
+
+# Redimencioanr a imagem:
+
+# precisa fazer um pip install pillow:
+# para o ambiente virtual saber que tem o Pillow instalado
+# Em djangoapp/utils/images.py :
+# será a criada a função resize_image que é para usar o Pillow para 
+# redimencionar iamgens.
+
+# 530
+
