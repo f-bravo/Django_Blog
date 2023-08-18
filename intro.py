@@ -386,5 +386,28 @@ def validate_png(image):
 # será a criada a função resize_image que é para usar o Pillow para 
 # redimencionar iamgens.
 
-# 530
+
+# 530 - CSS
+
+# Reset CSS mais estruturado 0 remedy.css
+
+# https://github.com/jensimmons/cssremedy/blob/master/css/remedy.css
+
+# Criado o arquivo em blog/cdd/remedy.css 
+# faça um link no _head.html - coloque o remedy primeiro
+# <link rel="stylesheet" href="{% static 'blog/css/remedy.css' %}">
+# <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+
+# No CSS será usado um formato para as cores diferente. Veja se é bom, n da erro
+# e se da p se daptar numa boa.
+
+# 531 
+
+# Basse do CSS feito.
+
+# blog/partials/_temp.html : arquivo temporário p ajudar no layout
+# Foi gerado um arquivo no loripsum.net para por no _temp.html
+# No blog/partials/base.html inclua o caminho do arquivo _temp
+# {% include 'blog/partials/_temp.html' %}
+
 
