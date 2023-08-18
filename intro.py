@@ -410,4 +410,37 @@ def validate_png(image):
 # No blog/partials/base.html inclua o caminho do arquivo _temp
 # {% include 'blog/partials/_temp.html' %}
 
+# 532
+
+# Criando os templates necessários para o Layout:
+
+# Em djangoapp/blog/templates/blog/pages:
+# Foi criada mais 2 páginas. A PAge e post além da index.
+# Essas 3 páginas jã vão cobrir o blog inteiro.
+# O index vai carregar tudo onde tiver vários posts:
+# Busca, usuários, categorias, home, tags. Carrega lista de posts
+# O page carrega as páginas e o post carrega os posts
+
+# Precisa carregar as páginas para ver. E para isso vamos criar 2 views.
+# Em djangoapp/blog/views.py:
+"""
+def page(request):
+    return render(
+        request,
+        'blog/pages/page.html',
+    )
+def post(request):
+    return render(
+        request,
+        'blog/pages/post.html',
+    )"""
+# Feito as views crie as urls:
+
+
+# 533 
+
+# finalizando a parte de html e css do blog.
+# Layout praticamente pronto.
+
+# 535
 
