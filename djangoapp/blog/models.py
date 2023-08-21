@@ -1,5 +1,6 @@
 from django.db import models
 from utils.rands import slugify_new
+from django.contrib.auth.models import User
 
 
 class Tag(models.Model):
@@ -64,3 +65,66 @@ class Page(models.Model):
 
     def __str__(self) -> str:
         return self.title
+    
+
+class Post(models.Model):
+    class Meta:
+        verbose_name = 'Post'
+        verbose_name_plural = 'Posts'
+
+    title = models.CharField(max_length=65)
+    slug = models.SlugField(
+        unique=True, default="",
+        null=True, blank=True, max_length=255,
+    )
+    excerpt = models.CharField(max_length=150)  # resumo do post
+    is_published = models.BooleanField(
+        default=False,
+        help_text=(
+            'Este campo precisará estar marcado '
+            'para o post ser exibida publicamente.'
+        ),
+    )
+    # conver = capa do post
+    content = models.TextField()
+    cover = models.ImageField(upload_to='post/%Y/%m/', blank=True, default='')
+    cover_is_post_content = models.BooleanField(
+        default=True,
+        help_text='Se marcado exibirá a capa dentro do post.',
+    )
+    # Quando opost for salvo vai adicionar a data do dia.
+    created_at = models.DateTimeField(auto_now_add=True)
+    # Quando vier do user.post_created_by.all
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True, null=True,
+        related_name='post_created_by'
+    )
+    # Toda vez que salvar um novo post vai gerar uma nova data
+    updated_at = models.DateTimeField(auto_now=True)
+    # usuário que atualizou o post - user.post_updated_by.all()
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True, null=True,
+        related_name='post_updated_by'
+    )
+
+    # Category é mãe do post. Uma categoria para muitos posts.
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True,
+        default=None,
+    )
+    # uma tag pode ser utulizaem vários posts ou um post pode ter várias tags
+    tags = models.ManyToManyField(Tag, blank=True, default='')
+
+    def __str__(self) -> str:
+        return self.title
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify_new(self.title, 4)
+        return super().save(*args, **kwargs)
+
+

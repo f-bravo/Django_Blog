@@ -538,4 +538,115 @@ class TagAdmin(admin.ModelAdmin):
 # A Page é uma parte do site que usa o cabeçalho, a estrutura toda. Puro html
 # E ficará a critério para por o que quiser. É bem mais simples que um post
 
+# identico - criação do PageAdmin: 
+"""
+@admin.register(Page)
+class PageAdmin(admin.ModelAdmin):
+    list_display = 'id', 'title', 'is_published',
+    list_display_links = 'title',
+    search_fields = 'id', 'slug', 'title', 'content',
+    list_per_page = 50
+    list_filter = 'is_published',
+    list_editable = 'is_published',
+    ordering = '-id',
+    prepopulated_fields = {
+        "slug": ('title',),
+    }"""
+# identico - criação do model - Page:
+"""
+class Page(models.Model):
+    title = models.CharField(max_length=65,)
+    slug = models.SlugField(
+        unique=True, default="",
+        null=False, blank=True, max_length=255
+    )
+    is_published = models.BooleanField(
+        default=False,
+        help_text=(
+            'Este campo precisará estar marcado '
+            'para a página ser exibida publicamente.'
+        ),
+    )
+    content = models.TextField()
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify_new(self.title, 4)
+        return super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return self.title  """
+
+
+# 538 - 
+
+# Criando o models Post
+# blog/models.py :
+"""
+class Post(models.Model):
+    class Meta:
+        verbose_name = 'Post'
+        verbose_name_plural = 'Posts'
+
+    title = models.CharField(max_length=65)
+    slug = models.SlugField(
+        unique=True, default="",
+        null=True, blank=True, max_length=255,
+    )
+    excerpt = models.CharField(max_length=150)  # resumo do post
+    is_published = models.BooleanField(
+        default=False,
+        help_text=(
+            'Este campo precisará estar marcado '
+            'para o post ser exibida publicamente.'
+        ),
+    )
+    # conver = capa do post
+    content = models.TextField()
+    cover = models.ImageField(upload_to='post/%Y/%m/', blank=True, default='')
+    cover_is_post_content = models.BooleanField(
+        default=True,
+        help_text='Se marcado exibirá a capa dentro do post.',
+    )
+    # Quando opost for salvo vai adicionar a data do dia.
+    created_at = models.DateTimeField(auto_now_add=True)
+    # Toda vez que salvar um novo post vai gerar uma nova data
+    updated_at = models.DateTimeField(auto_now=True)
+    # Category é mãe do post. Uma categoria para muitos posts.
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True,
+        default=None,
+    )
+    # uma tag pode ser utulizaem vários posts ou um post pode ter várias tags
+    tags = models.ManyToManyField(Tag, blank=True, default='')
+
+    def __str__(self) -> str:
+        return self.title
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify_new(self.title, 4)
+        return super().save(*args, **kwargs)
+"""
+# Faça a migração:
+# -> docker compose run --rm djangoapp migrate.sh
+
+# blog/admin.py
+"""
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = 'id', 'title', 'is_published',  'created_by',
+    list_display_links = 'title',
+    search_fields = 'id', 'slug', 'title', 'excerpt', 'content',
+    list_per_page = 50
+    list_filter = 'category', 'is_published',
+    list_editable = 'is_published',
+    ordering = '-id',
+    readonly_fields = 'created_at', 'updated_at', 'created_by', 'updated_by',
+    prepopulated_fields = {
+        "slug": ('title',),
+    }
+    autocomplete_fields = 'tags', 'category',"""
+
+# 
 
