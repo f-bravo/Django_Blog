@@ -459,4 +459,75 @@ def post(request):
 # <title> {{ site_setup.title }} </title> fina o nome do navegador.
 
 
+# 536
+
+# criand os models Tag e category + SlugField
+
+# em djangoapp/blog/models.py :
+
+# O autor que criar o post será um usuário do Django.
+
+# Slug é um texto que vai representar a tag na url. É como se fosse um "id"
+# Toda vez que for buscar a Tag, vai buscar pela slug. Mesmo ela tento um id.
+# Slug é uma url. Não terá acento. Só letras e traços basicamente.
+# Como a slug será usada p/ bsucar uma tag ela precisa ser única.
+# coloque unique=True.
+# Models.py :
+"""
+from django.db import models
+from utils.rands import slugify_new
+
+class Tag(models.Model):
+    class Meta:
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
+
+    name = models.CharField(max_length=255);
+    slug = models.SlugField(
+        unique=True, default=None, null=True, blank=True, max_length=255,
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify_new(self.name, 4)
+        return super().save(*args, **kwargs) """ 
+
+# Slug:
+"""
+# Função que gera letras e números aleatórios
+import string
+from random import SystemRandom
+from django.utils.text import slugify
+
+def random_letters(k=5):
+    return ''.join(SystemRandom().choices(
+        string.ascii_lowercase + string.digits, k=k
+    ))
+
+def slugify_new(text, k=5):
+    return slugify(text) + '-' + random_letters(k)
+
+# print(random_letters()) # 1lhnY
+# print(slugify('Olá mundo')) # ola-mundo
+# Qualquer coisa que tiver no name faça um slugify: transforma numa 'url'
+# print(slugify_new('Testando o slugify new')) # testando-o-slugify-new-imcqrnr
+"""
+
+
+# Faça a migração - novamente - docker-compose up
+
+# em blog/admin.py
+"""
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = 'id', 'name', 'slug',
+    list_display_links = 'name',
+    search_fields = 'id', 'name', 'slug',
+    list_per_page = 10
+    ordering = '-id',
+    prepopulated_fields = {
+        "slug": ('name',),
+    }
+"""
+
 # 
