@@ -530,4 +530,12 @@ class TagAdmin(admin.ModelAdmin):
     }
 """
 
-# 
+# 537 
+
+
+# criando o model e a adimin Page(models.Model e admin.Model.Admim)
+
+# A Page é uma parte do site que usa o cabeçalho, a estrutura toda. Puro html
+# E ficará a critério para por o que quiser. É bem mais simples que um post
+
+
