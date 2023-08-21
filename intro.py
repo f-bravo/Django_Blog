@@ -444,3 +444,19 @@ def post(request):
 
 # 535
 
+# Usando o context processor do model site_setup nos templates p/ configurações
+# Fazendo a parte de configuração que mostra ou não determinado conteúdo do site
+# Colocando um menu link na _header.html:
+# Relação de Pai para Filho:
+# Site_setup para MenuLink.
+# O menuy link tem uma foreingkey para site_setup
+# {{ site_setup.menulink_set.all }} 
+# Da para colocar mais de um bastando acrescentar na área admin.
+
+# O nome setup está dinâmico. Ele modifica tanto no título da página, na footer
+# e o nome que fica no navegador.
+# Ao colocar no _head.html:
+# <title> {{ site_setup.title }} </title> fina o nome do navegador.
+
+
+# 
