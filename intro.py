@@ -648,5 +648,51 @@ class PostAdmin(admin.ModelAdmin):
     }
     autocomplete_fields = 'tags', 'category',"""
 
-# 
+# 539 
+
+# Preenchendo created_by e updated_by via admin.ModelAdmin
+
+# Como está na area adm do Django vai trabalhar especificamente nessa área.
+# Usando o save_modo específico da área administrativa do post por exemplo
+"""change: quem está criando ou alterando: o change atualiza na área adm do post
+def save_model(self, request, obj, form, change):
+        if change:
+            obj.updated_by = request.user
+        else:
+            obj.updated_by = request.user
+
+        obj.save()
+"""
+
+
+# 540 
+
+# Redimensionamento e otimização de imagens com o Pillow no save do model
+
+# Cover - capa do post: cada imagem tem um tamanho e dependendo do tamanho
+# ficaria muito pesado carregar a página principal com 9 posts.
+
+# Caso envie uma imagem  grande como redimencionar? 
+# Na grid das imagens normalmente terá 3 com 1200 px de largura
+# Com um porsto fica aproximadamente 700 px de largura.
+# No conteudo do post é 900 px. Basta olhar a largura inspecionando.
+
+# Já fizemos o trabalho de redimencionamento de img no favicon
+# Ao final da class post adicione esse trecho após o slug:
+""" 
+def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify_new(self.title, 4)
+
+        current_cover_name = str(self.cover.name)
+        super_save = super().save(*args, **kwargs)
+        cover_changed = False
+
+        if self.cover:
+            cover_changed = current_cover_name != self.cover.name
+
+        if cover_changed:
+            resize_image(self.cover, 900, True, 70)
+
+        return super_save  """
 
